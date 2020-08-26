@@ -40,8 +40,9 @@ if __name__ == '__main__':
     while 1:
         # info = receiver.receiveInfo()
         # dm = dataManager(info)
-        led.off()
         presence_val = input("Press 0 or 1")
+
+        led.off()
         randH = uniform(0.0, 10.0)
         randT = uniform(9.0, 40.0)
         randL = uniform(0.0, 5.0)
