@@ -1,9 +1,9 @@
 import sys
 
-sys.path.append('../viewModel')
-sys.path.append('../view')
-sys.path.append('../model')
-sys.path.append('../utils')
+sys.path.append('../viewModel/')
+sys.path.append('../view/')
+sys.path.append('../model/')
+sys.path.append('../utils/')
 from random import uniform
 from stopwatch import Stopwatch
 from viewModel.dataManager import dataManager
