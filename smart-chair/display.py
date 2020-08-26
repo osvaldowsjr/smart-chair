@@ -18,10 +18,11 @@ def dealAlarm(data_manager: dataManager, timer_idle: Stopwatch, timer_stand):
     alarm_manager.tryStartTimer()
     alarm_manager.tryStopTimer()
     if alarm_manager.shouldAlarm():
-        print("alarme!")
+        led.on()
         delay = input("Adiar? (s/n)? ")
         if delay.upper() == 'S':
             alarm_manager.delayTimer()
+            led.off()
         else:
             led.on()
 
@@ -42,7 +43,6 @@ if __name__ == '__main__':
         # dm = dataManager(info)
         presence_val = input("Press 0 or 1")
 
-        led.off()
         randH = uniform(0.0, 10.0)
         randT = uniform(9.0, 40.0)
         randL = uniform(0.0, 5.0)
