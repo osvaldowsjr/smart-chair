@@ -1,15 +1,12 @@
+import os.path
 import sys
 
-sys.path.append('../viewModel/')
-sys.path.append('../view/')
-sys.path.append('../model/')
-sys.path.append('../utils/')
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from random import uniform
 from stopwatch import Stopwatch
 from viewModel.dataManager import dataManager
 from viewModel.timeManager import timeManager
 from viewModel.temperatureManager import tempManager
-import gpiozero
 
 
 # receiver = Receiver(port="COM4", baudrate=115200,
@@ -25,7 +22,7 @@ def dealAlarm(data_manager: dataManager, timer_idle: Stopwatch, timer_stand):
         if delay.upper() == 'S':
             alarm_manager.delayTimer()
         else:
-            led.blink()
+            print("alarme")
 
 
 def dealTemp(temp: float):
@@ -38,10 +35,7 @@ if __name__ == '__main__':
     sw.stop()
     sw2 = Stopwatch()
     sw2.stop()
-    led = gpiozero.LED(17)
-    # root = tk.Tk()
-    # app = Application(master=root)
-    # app.mainloop()
+    #led = gpiozero.LED(17)
     while 1:
         # info = receiver.receiveInfo()
         # dm = dataManager(info)
