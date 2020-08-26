@@ -7,6 +7,7 @@ from stopwatch import Stopwatch
 from viewModel.dataManager import dataManager
 from viewModel.timeManager import timeManager
 from viewModel.temperatureManager import tempManager
+import gpiozero
 
 
 # receiver = Receiver(port="COM4", baudrate=115200,
@@ -22,7 +23,7 @@ def dealAlarm(data_manager: dataManager, timer_idle: Stopwatch, timer_stand):
         if delay.upper() == 'S':
             alarm_manager.delayTimer()
         else:
-            print("alarme")
+            led.on()
 
 
 def dealTemp(temp: float):
@@ -35,10 +36,11 @@ if __name__ == '__main__':
     sw.stop()
     sw2 = Stopwatch()
     sw2.stop()
-    #led = gpiozero.LED(17)
+    led = gpiozero.LED(17)
     while 1:
         # info = receiver.receiveInfo()
         # dm = dataManager(info)
+        led.off()
         presence_val = input("Press 0 or 1")
         randH = uniform(0.0, 10.0)
         randT = uniform(9.0, 40.0)
