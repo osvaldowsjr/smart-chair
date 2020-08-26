@@ -42,7 +42,7 @@ if __name__ == '__main__':
         # info = receiver.receiveInfo()
         # dm = dataManager(info)
         presence_val = input("Press 0 or 1")
-        if presence_val is 0:
+        if presence_val is "0":
             led.off()
 
         randH = uniform(0.0, 10.0)
