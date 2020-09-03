@@ -21,6 +21,7 @@ class Application(tk.Frame):
         self.master = master
         self.dm = dataManager('{"humidity":0,"temperature": 1, "luminosity": 2, "presence": false, "time": 1200}')
         self.presence = 0
+        self.alarmTime = 5.00
 
         self.tempVar = tk.StringVar()
         self.humVar = tk.StringVar()
@@ -37,8 +38,8 @@ class Application(tk.Frame):
         self.randButton1 = tk.Button(master, text="1", bg="red", command=self.update_widgets1)
         #
 
-        self.adiarBt = tk.Button(master, text="Adiar", bg="green", command=self.delay)
-        self.desligarBt = tk.Button(master, text="Desligar", bg="red", command=self.delayVar.set("N"))
+        self.adiarBt = tk.Button(master, text="Adiar", bg="green", command=self.setDelayVar)
+        self.desligarBt = tk.Button(master, text="Desligar", bg="red", command=self.setDelayVarN)
 
         self.dataManager = dataManager
         self.createWidgets()
@@ -59,23 +60,29 @@ class Application(tk.Frame):
     def update_widgets1(self):
         self.presence = 1
 
-    def delay(self, alarm_manager):
-        alarm_manager.delayTimer()
+    def setDelayVar(self):
         self.delayVar.set("S")
-        print("led off")
+
+    def setDelayVarOff(self):
+        self.delayVar.set("Desligar")
 
     def dealAlarm(self, timer_idle: Stopwatch, timer_stand):
         alarm_manager = timeManager(self.dm, timer_idle, timer_stand)
         alarm_manager.tryStartTimer()
         alarm_manager.tryStopTimer()
-        if alarm_manager.shouldAlarm():
+        if alarm_manager.shouldAlarm(self.alarmTime):
             print('alarme on')
             print(self.delayVar.get())
             if self.delayVar.get().upper() == 'S':
-                self.delay(alarm_manager=alarm_manager)
+                self.alarmTime += 10.0
                 print('alarme off')
+                if self.alarmTime > 5.00:
+                    self.alarmTime = 5.00
             elif self.delayVar.get().upper() == 'N':
-                print('alarme on 2')
+                alarm_manager.turnOffAlarm()
+                self.alarmTime = 5.00
+            else:
+                pass
 
     def dealTemp(self):
         temp_manager = tempManager(self.dm.getTemperature())

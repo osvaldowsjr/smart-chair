@@ -23,9 +23,9 @@ class timeManager:
             self.sw2.start()
             print("usuário saiu")
 
-    def delayTimer(self):
+    def shouldAlarm(self, duration: float):
+        return self.sw.duration >= duration
+
+    def turnOffAlarm(self):
         self.sw.stop()
         self.sw.reset()
-
-    def shouldAlarm(self):
-        return self.sw.duration >= 5.00
