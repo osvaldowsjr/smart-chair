@@ -96,8 +96,7 @@ class Application(tk.Frame):
 
     def update_dm(self, json):
         self.dm = dataManager(json)
-        ubidotsSender = UbidotsSender(self.dm)
-        ubidotsSender.post()
+        UbidotsSender(self.dm).post()
         self.tempVar.set("%.2f" % (self.dm.getTemperature()))
         self.humVar.set("%.2f" % (self.dm.getHumidity()))
 
