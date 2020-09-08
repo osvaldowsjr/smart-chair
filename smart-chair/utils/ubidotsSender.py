@@ -18,7 +18,6 @@ class UbidotsSender:
             req = requests.post(url=self.url, headers=self.headers, json=self.json)
             status = req.status_code
             attempts += 1
-            sleep(1)
         if status >= 400:
             print("[ERROR] Could not send data after 5 attempts, please check \
                     your token credentials and internet connection")

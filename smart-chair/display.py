@@ -3,6 +3,7 @@ import sys
 import tkinter
 from datetime import datetime
 import tkinter as tk
+import threading
 import gpiozero
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -96,9 +97,14 @@ class Application(tk.Frame):
 
     def update_dm(self, json):
         self.dm = dataManager(json)
-        UbidotsSender(self.dm).post()
         self.tempVar.set("%.2f" % (self.dm.getTemperature()))
         self.humVar.set("%.2f" % (self.dm.getHumidity()))
+        thread = threading.Thread(target=self.sendInfo)
+        thread.start()
+        thread.join()
+
+    def sendInfo(self):
+        UbidotsSender(self.dm).post()
 
 
 root = tkinter.Tk()
@@ -126,11 +132,10 @@ def abc():
         presence[view.presence],
         current_time)
     print(new_json)
-
     view.update_dm(new_json)
     view.dealAlarm(sw, sw2)
     view.dealTemp()
-    root.after(1000, abc)
+    root.after(5000, abc)
 
 
 root.after(1000, abc)
