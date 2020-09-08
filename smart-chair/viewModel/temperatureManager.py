@@ -30,8 +30,6 @@ class tempManager:
     @staticmethod
     def getSeason():
         doy = datetime.today().timetuple().tm_yday
-        print(doy)
-
         fall = range(80, 172)
         winter = range(172, 264)
         spring = range(264, 355)

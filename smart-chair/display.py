@@ -1,14 +1,16 @@
 import os.path
 import sys
 import tkinter
-import time
+from datetime import datetime
+import tkinter as tk
+import gpiozero
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from stopwatch import Stopwatch
 from viewModel.timeManager import timeManager
 from viewModel.temperatureManager import tempManager
 from random import uniform
-import tkinter as tk
+from utils.ubidotsSender import UbidotsSender
 from viewModel.dataManager import dataManager
 
 
@@ -25,7 +27,7 @@ class Application(tk.Frame):
 
         self.tempVar = tk.StringVar()
         self.humVar = tk.StringVar()
-        self.delayVar = tk.StringVar()
+        self.delayVar = tk.StringVar(value="Off")
 
         self.titleTemp = tk.Label(master, text='Temperatura:', bg="red", fg="white")
         self.temp = tk.Label(master, textvariable=self.tempVar, bg="red", fg="white")
@@ -39,7 +41,7 @@ class Application(tk.Frame):
         #
 
         self.adiarBt = tk.Button(master, text="Adiar", bg="green", command=self.setDelayVar)
-        self.desligarBt = tk.Button(master, text="Desligar", bg="red", command=self.setDelayVarN)
+        self.desligarBt = tk.Button(master, text="Desligar", bg="red", command=self.setDelayVarOff)
 
         self.dataManager = dataManager
         self.createWidgets()
@@ -61,7 +63,7 @@ class Application(tk.Frame):
         self.presence = 1
 
     def setDelayVar(self):
-        self.delayVar.set("S")
+        self.alarmTime += 2.0
 
     def setDelayVarOff(self):
         self.delayVar.set("Desligar")
@@ -71,18 +73,22 @@ class Application(tk.Frame):
         alarm_manager.tryStartTimer()
         alarm_manager.tryStopTimer()
         if alarm_manager.shouldAlarm(self.alarmTime):
-            print('alarme on')
-            print(self.delayVar.get())
-            if self.delayVar.get().upper() == 'S':
-                self.alarmTime += 10.0
-                print('alarme off')
-                if self.alarmTime > 5.00:
-                    self.alarmTime = 5.00
-            elif self.delayVar.get().upper() == 'N':
-                alarm_manager.turnOffAlarm()
-                self.alarmTime = 5.00
+            if self.delayVar.get() == "Off":
+                #led.on()
+                print("alarm On")
+                self.alarmTime += 1.0
+            elif self.delayVar.get() == "Desligar":
+                self.turnOffAlarm(alarm_manager)
             else:
-                pass
+                print("alarm Off")
+                #led.off()
+
+    def turnOffAlarm(self, alarmManager: timeManager):
+        alarmManager.turnOffAlarm()
+        self.alarmTime = 5.0
+        print("alarm off")
+        #led.off()
+        self.delayVar.set("Off")
 
     def dealTemp(self):
         temp_manager = tempManager(self.dm.getTemperature())
@@ -90,14 +96,16 @@ class Application(tk.Frame):
 
     def update_dm(self, json):
         self.dm = dataManager(json)
-        self.tempVar.set(self.dm.getTemperature())
-        self.humVar.set(self.dm.getHumidity())
+        ubidotsSender = UbidotsSender(self.dm)
+        ubidotsSender.post()
+        self.tempVar.set("%.2f" % (self.dm.getTemperature()))
+        self.humVar.set("%.2f" % (self.dm.getHumidity()))
 
 
 root = tkinter.Tk()
 view = Application(root)
 
-# led = gpiozero.LED(17)
+#led = gpiozero.LED(17)
 sw = Stopwatch()
 sw.stop()
 sw2 = Stopwatch()
@@ -110,15 +118,19 @@ def abc():
     randT = uniform(9.0, 40.0)
     randL = uniform(0.0, 5.0)
     presence = ['false', 'true']
-    new_json = '{{"humidity":{0},"temperature": {1}, "luminosity": {2}, "presence": {3}, "time": {4}}}'.format(
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    new_json = '{{"humidity":{0},"temperature": {1}, "luminosity": {2}, "presence": {3}, "time": "{4}"}}'.format(
         randH,
         randT,
         randL,
         presence[view.presence],
-        1200)
+        current_time)
     print(new_json)
+
     view.update_dm(new_json)
     view.dealAlarm(sw, sw2)
+    view.dealTemp()
     root.after(1000, abc)
 
 
