@@ -73,6 +73,8 @@ class Application(tk.Frame):
         alarm_manager = timeManager(self.dm, timer_idle, timer_stand)
         alarm_manager.tryStartTimer()
         alarm_manager.tryStopTimer()
+        if not self.dm.checkPresence():
+            self.turnOffAlarm(alarm_manager)
         if alarm_manager.shouldAlarm(self.alarmTime):
             if self.delayVar.get() == "Off":
                 led.on()
