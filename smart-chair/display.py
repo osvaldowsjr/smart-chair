@@ -75,20 +75,20 @@ class Application(tk.Frame):
         alarm_manager.tryStopTimer()
         if alarm_manager.shouldAlarm(self.alarmTime):
             if self.delayVar.get() == "Off":
-                #led.on()
-                print("alarm On")
+                led.on()
+                #print("alarm On")
                 self.alarmTime += 1.0
             elif self.delayVar.get() == "Desligar":
                 self.turnOffAlarm(alarm_manager)
             else:
-                print("alarm Off")
-                #led.off()
+                #print("alarm Off")
+                led.off()
 
     def turnOffAlarm(self, alarmManager: timeManager):
         alarmManager.turnOffAlarm()
         self.alarmTime = 5.0
-        print("alarm off")
-        #led.off()
+        #print("alarm off")
+        led.off()
         self.delayVar.set("Off")
 
     def dealTemp(self):
@@ -110,7 +110,7 @@ class Application(tk.Frame):
 root = tkinter.Tk()
 view = Application(root)
 
-#led = gpiozero.LED(17)
+led = gpiozero.LED(17)
 sw = Stopwatch()
 sw.stop()
 sw2 = Stopwatch()
