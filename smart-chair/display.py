@@ -99,9 +99,7 @@ class Application(tk.Frame):
         self.dm = dataManager(json)
         self.tempVar.set("%.2f" % (self.dm.getTemperature()))
         self.humVar.set("%.2f" % (self.dm.getHumidity()))
-        thread = threading.Thread(target=self.sendInfo)
-        thread.start()
-        thread.join()
+        self.sendInfo()
 
     def sendInfo(self):
         UbidotsSender(self.dm).post()
