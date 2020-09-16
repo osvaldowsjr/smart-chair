@@ -65,7 +65,6 @@ class Application(tk.Frame):
 
     def setDelayVar(self):
         self.delayVar.set("Adiar")
-        self.alarmTime += 5.0
 
     def setDelayVarOff(self):
         self.delayVar.set("Desligar")
@@ -84,9 +83,7 @@ class Application(tk.Frame):
             elif self.delayVar.get() == "Desligar":
                 self.turnOffAlarm(alarm_manager)
             elif self.delayVar.get() == "Adiar":
-                print("alarm off - Adiar")
-                led.off()
-                self.delayVar.set("Off")
+                self.delayAlarm(alarm_manager)
             else:
                 print("alarm Off - Sem condiçoes")
                 led.off()
@@ -95,6 +92,13 @@ class Application(tk.Frame):
         alarmManager.turnOffAlarm()
         self.alarmTime = 5.0
         print("alarm off - desligar")
+        led.off()
+        self.delayVar.set("Off")
+
+    def delayAlarm(self, alarmManager: timeManager):
+        alarmManager.turnOffAlarm()
+        self.alarmTime += 5.0
+        print("alarm off - Adiar")
         led.off()
         self.delayVar.set("Off")
 
