@@ -1,7 +1,0 @@
-'{
-    "humidity": 10,
-    "temperature": 22,
-    "luminosity": 50,
-    "presence": true,
-    "time": "12:00"
-}'

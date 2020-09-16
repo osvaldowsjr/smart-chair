@@ -2,6 +2,7 @@ from viewModel.dataManager import dataManager
 from stopwatch import Stopwatch
 
 
+# Controle do alarme e gerenciamento do tempo de inatividade
 class timeManager:
     def __init__(self, dm: dataManager, sw: Stopwatch, sw2: Stopwatch):
         self.dm = dm

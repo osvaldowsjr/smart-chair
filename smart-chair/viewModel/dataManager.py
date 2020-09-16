@@ -1,6 +1,7 @@
 from model.smartChairModel import chairData
 
 
+# Controle das informações retiradas do json
 class dataManager:
     def __init__(self, data):
         self.data = chairData(data)

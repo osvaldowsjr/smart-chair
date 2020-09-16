@@ -6,6 +6,8 @@ import tkinter as tk
 import threading
 import gpiozero
 
+# Imports custom - Start Region
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from stopwatch import Stopwatch
 from viewModel.timeManager import timeManager
@@ -14,10 +16,16 @@ from random import uniform
 from utils.ubidotsSender import UbidotsSender
 from viewModel.dataManager import dataManager
 
+# End Region
 
 # receiver = Receiver(port="COM4", baudrate=115200,
 #                   bytesize=8, timeout=2)
 
+
+# ------------------------------------------------------------------------------------------
+
+
+# Criação do layout - Start Region
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
@@ -57,6 +65,10 @@ class Application(tk.Frame):
         self.adiarBt.pack(fill=tk.X)
         self.desligarBt.pack(fill=tk.X)
 
+    # End Region
+    # ------------------------------------------------------------------------------------------
+    # Funções para interação com o display - Start Region
+
     def update_widgets0(self):
         self.presence = 0
 
@@ -68,6 +80,10 @@ class Application(tk.Frame):
 
     def setDelayVarOff(self):
         self.delayVar.set("Desligar")
+
+    # End Region
+    # ------------------------------------------------------------------------------------------
+    # Funções de alarme e led - Start Region
 
     def dealAlarm(self, timer_idle: Stopwatch, timer_stand):
         alarm_manager = timeManager(self.dm, timer_idle, timer_stand)
@@ -108,9 +124,17 @@ class Application(tk.Frame):
         led.off()
         alarmManager.turnOffAlarm()
 
+    # End Region
+    # ------------------------------------------------------------------------------------------
+    # Funções para controle de temperatura - Start Region
+
     def dealTemp(self):
         temp_manager = tempManager(self.dm.getTemperature())
         print(temp_manager.getDisplayMsg())
+
+    # End Region
+    # ------------------------------------------------------------------------------------------
+    # Funçoes de controle de informação - Start Region
 
     def update_dm(self, json):
         self.dm = dataManager(json)
@@ -123,6 +147,10 @@ class Application(tk.Frame):
         UbidotsSender(self.dm).post()
 
 
+# End Region
+# ------------------------------------------------------------------------------------------
+# Criações das instancias - Start Region
+
 root = tkinter.Tk()
 view = Application(root)
 
@@ -132,6 +160,10 @@ sw.stop()
 sw2 = Stopwatch()
 sw2.stop()
 
+
+# End Region
+# ------------------------------------------------------------------------------------------
+# Geração de JSON fake - Start Region
 
 def generateJson():
     # info = receiver.receiveInfo()
@@ -154,12 +186,22 @@ def generateJson():
     root.after(5000, generateJson)
 
 
+# End Region
+# ------------------------------------------------------------------------------------------
+# Finalização da cadeira - Start Region
+
 def turnOffChair():
     led.off()
     root.destroy()
     sys.exit("Obrigado por usar a cadeira S2")
 
 
+# End Region
+# ------------------------------------------------------------------------------------------
+# Main loop - Start Region
+
 root.after(1000, generateJson)
 root.protocol("WM_DELETE_WINDOW", turnOffChair)
 view.mainloop()
+
+# End Region

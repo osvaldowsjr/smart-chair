@@ -4,6 +4,7 @@ from viewModel.dataManager import dataManager
 import requests
 
 
+# Classe que controla o envio de informações para o Ubidots
 class UbidotsSender:
     def __init__(self, dm: dataManager):
         self.url = "https://things.ubidots.com/api/v1.6/devices/cadeira/"

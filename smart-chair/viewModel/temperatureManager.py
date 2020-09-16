@@ -1,6 +1,7 @@
-from datetime import date, datetime
+from datetime import datetime
 
 
+# Classe que gerencia a temperatura do ambiente
 class tempManager:
     def __init__(self, temp: float):
         self.temp = temp
