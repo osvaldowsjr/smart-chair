@@ -28,15 +28,16 @@ class UbidotsSender:
 
     @staticmethod
     def formatPayload(dm: dataManager):
+        valuePresence = 0
+        if dm.checkPresence():
+            valuePresence = 1
+
         payload = {
             "humidade": dm.getHumidity(),
             "temperatura": dm.getTemperature(),
             "tempo": {"value": 0,
                       "context": {
                           "tempo": dm.getTime()}},
-            "presenca": {"value": 0,
-                         "context": {
-                             "presenca": dm.checkPresence()
-                         }}
+            "presenca": valuePresence
         }
         return payload
