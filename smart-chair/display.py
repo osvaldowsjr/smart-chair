@@ -160,6 +160,6 @@ def turnOffChair():
     sys.exit("Obrigado por usar a cadeira S2")
 
 
-root.protocol("WM_DELETE_WINDOW", turnOffChair)
 root.after(1000, generateJson)
+root.protocol("WM_DELETE_WINDOW", turnOffChair)
 view.mainloop()
