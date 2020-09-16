@@ -64,7 +64,8 @@ class Application(tk.Frame):
         self.presence = 1
 
     def setDelayVar(self):
-        self.alarmTime += 2.0
+        self.delayVar.set("Adiar")
+        self.alarmTime += 5.0
 
     def setDelayVarOff(self):
         self.delayVar.set("Desligar")
@@ -74,24 +75,32 @@ class Application(tk.Frame):
         alarm_manager.tryStartTimer()
         alarm_manager.tryStopTimer()
         if not self.dm.checkPresence():
-            self.turnOffAlarm(alarm_manager)
+            self.setAlarmInitial(alarm_manager)
         if alarm_manager.shouldAlarm(self.alarmTime):
             if self.delayVar.get() == "Off":
                 led.on()
-                #print("alarm On")
+                print("alarm On - Condição off")
                 self.alarmTime += 1.0
             elif self.delayVar.get() == "Desligar":
                 self.turnOffAlarm(alarm_manager)
+            elif self.delayVar.get() == "Adiar":
+                print("alarm off - Adiar")
+                led.off()
+                self.delayVar.set("Off")
             else:
-                #print("alarm Off")
+                print("alarm Off - Sem condiçoes")
                 led.off()
 
     def turnOffAlarm(self, alarmManager: timeManager):
         alarmManager.turnOffAlarm()
         self.alarmTime = 5.0
-        #print("alarm off")
+        print("alarm off - desligar")
         led.off()
         self.delayVar.set("Off")
+
+    def setAlarmInitial(self, alarmManager: timeManager):
+        print("Alarm off - initial")
+        alarmManager.turnOffAlarm()
 
     def dealTemp(self):
         temp_manager = tempManager(self.dm.getTemperature())
