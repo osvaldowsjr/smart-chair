@@ -104,6 +104,7 @@ class Application(tk.Frame):
 
     def setAlarmInitial(self, alarmManager: timeManager):
         print("Alarm off - initial")
+        self.alarmTime = 5.0
         led.off()
         alarmManager.turnOffAlarm()
 
@@ -132,7 +133,7 @@ sw2 = Stopwatch()
 sw2.stop()
 
 
-def abc():
+def generateJson():
     # info = receiver.receiveInfo()
     randH = uniform(0.0, 10.0)
     randT = uniform(9.0, 40.0)
@@ -150,8 +151,14 @@ def abc():
     view.update_dm(new_json)
     view.dealAlarm(sw, sw2)
     view.dealTemp()
-    root.after(5000, abc)
+    root.after(5000, generateJson)
 
 
-root.after(1000, abc)
+def turnOffChair():
+    led.off()
+    sys.exit("Obrigado por usar a cadeira S2")
+
+
+root.protocol("WM_DELETE_WINDOW", turnOffChair)
+root.after(1000, generateJson)
 view.mainloop()
