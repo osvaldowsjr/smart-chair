@@ -35,9 +35,6 @@ class UbidotsSender:
         payload = {
             "humidade": dm.getHumidity(),
             "temperatura": dm.getTemperature(),
-            "tempo": {"value": 0,
-                      "context": {
-                          "tempo": dm.getTime()}},
             "presenca": valuePresence
         }
         return payload
