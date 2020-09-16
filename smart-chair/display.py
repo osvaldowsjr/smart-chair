@@ -104,6 +104,7 @@ class Application(tk.Frame):
 
     def setAlarmInitial(self, alarmManager: timeManager):
         print("Alarm off - initial")
+        led.off()
         alarmManager.turnOffAlarm()
 
     def dealTemp(self):
