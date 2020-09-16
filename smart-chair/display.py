@@ -156,6 +156,7 @@ def generateJson():
 
 def turnOffChair():
     led.off()
+    root.destroy()
     sys.exit("Obrigado por usar a cadeira S2")
 
 
