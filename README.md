@@ -20,3 +20,4 @@ A integração é feita pela porta serial de um raspberry pi e um MBED onde segr
 	-Raspberry PI  
 	-Cabo para comunicação Serial  
 	-MBED  
+	-Display touch screen
