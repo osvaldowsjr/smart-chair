@@ -15,13 +15,9 @@ from viewModel.temperatureManager import tempManager
 from random import uniform
 from utils.ubidotsSender import UbidotsSender
 from viewModel.dataManager import dataManager
+from utils.serialreceiver import Receiver
 
 # End Region
-
-# receiver = Receiver(port="COM4", baudrate=115200,
-#                   bytesize=8, timeout=2)
-
-
 # ------------------------------------------------------------------------------------------
 
 
@@ -160,27 +156,22 @@ sw.stop()
 sw2 = Stopwatch()
 sw2.stop()
 
+receiver = Receiver(port="/dev/ttyACM0", baudrate=9600,
+                    bytesize=8, timeout=2)
 
 # End Region
 # ------------------------------------------------------------------------------------------
 # Geração de JSON fake - Start Region
 
 def generateJson():
-    # info = receiver.receiveInfo()
-    randH = uniform(0.0, 10.0)
-    randT = uniform(9.0, 40.0)
+    info = receiver.receiveInfo()
     randL = uniform(0.0, 5.0)
-    presence = ['false', 'true']
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
-    new_json = '{{"humidity":{0},"temperature": {1}, "luminosity": {2}, "presence": {3}, "time": "{4}"}}'.format(
-        randH,
-        randT,
-        randL,
-        presence[view.presence],
-        current_time)
-    print(new_json)
-    view.update_dm(new_json)
+    info.replace("null", randL)
+    info.replace('queijo', current_time)
+    print(info)
+    view.update_dm(info)
     view.dealAlarm(sw, sw2)
     view.dealTemp()
     root.after(5000, generateJson)
