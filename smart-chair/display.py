@@ -15,7 +15,7 @@ from viewModel.temperatureManager import tempManager
 from random import uniform
 from utils.ubidotsSender import UbidotsSender
 from viewModel.dataManager import dataManager
-from utils.serialreceiver import Receiver
+from utils.serialReceiver import Receiver
 
 # End Region
 # ------------------------------------------------------------------------------------------
@@ -169,12 +169,17 @@ def generateJson():
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     info.replace("null", randL)
-    info.replace('queijo', current_time)
+    info.replace("timer", current_time)
     print(info)
-    view.update_dm(info)
-    view.dealAlarm(sw, sw2)
-    view.dealTemp()
-    root.after(5000, generateJson)
+    try:
+        view.update_dm(info)
+        view.dealAlarm(sw, sw2)
+        view.dealTemp()
+        root.after(5000, generateJson)
+        print("OK")
+    except :
+        print("NOT OK")
+        root.after(5000, generateJson)
 
 
 # End Region

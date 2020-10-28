@@ -11,7 +11,6 @@ class Receiver:
     def receiveInfo(self):
         if self.serialPort.in_waiting > 0:
             self.serialString = self.serialPort.readline()
-            self.serialPort.write("Data ok!")
             return self.serialString.decode('Ascii')
 
     def getSerialPort(self):
