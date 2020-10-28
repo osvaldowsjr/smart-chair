@@ -168,18 +168,18 @@ def generateJson():
     randL = uniform(0.0, 5.0)
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
-    info.replace("null", randL)
-    info.replace("timer", current_time)
     print(info)
     try:
         view.update_dm(info)
         view.dealAlarm(sw, sw2)
         view.dealTemp()
-        root.after(5000, generateJson)
+        info.replace("null", str(randL))
+        info.replace("timer", current_time)
         print("OK")
-    except :
+    except Exception as e:
+        print(e)
         print("NOT OK")
-        root.after(5000, generateJson)
+    root.after(5000, generateJson)
 
 
 # End Region
